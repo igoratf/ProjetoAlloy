@@ -22,8 +22,7 @@ sig Navio {
 	combustivel: one Combustivel
 }
 
-abstract sig Nivel{
-	combustivel: one Combustivel
+abstract sig Nivel {
 }
 
 sig Alto extends Nivel{}
@@ -41,10 +40,34 @@ sig PetroleoBruto extends Combustivel{}
 sig OleoDiesel extends Combustivel{}
 
 
+fact Regiao {
+	one reg:Regiao |  reg in Norte
+	one reg: Regiao | reg in Sul
+	one reg: Regiao | reg in Oeste
+	one reg: Regiao | reg in Leste
+	all regiao: Regiao | #regiao.portos = 1
+}
+
+fact Navio {
+}
+
+
 fact Portos {
+	all porto: Porto | one porto.~portos
+	all porto: Porto | #porto.nivel = 1
+	all porto: Porto | #porto.navio > 0
 
-	all porto: Porto | porto in (Regiao.portos)
+}
 
+fact Nivel {
+	all niv: Nivel | one niv.~nivel
+}
+
+fact Combustivel {
+	one combustivel: Combustivel | combustivel in Gasolina
+	one combustivel: Combustivel | combustivel in PetroleoBruto
+	one combustivel: Combustivel | combustivel in OleoDiesel
+	all comb: Combustivel | one comb.~combustivel
 }
 
 
