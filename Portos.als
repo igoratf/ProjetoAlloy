@@ -15,7 +15,7 @@ sig Oeste extends Regiao{}
 
 sig Porto {
 	navio: set Navio,
-	nivel: Nivel
+	nivel: set Nivel
 }
 
 sig Navio {
@@ -23,7 +23,7 @@ sig Navio {
 }
 
 abstract sig Nivel{
-	combustivel: one Gasolina
+	combustivel: one Combustivel
 			
 }
 
