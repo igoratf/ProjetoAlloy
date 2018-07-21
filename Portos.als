@@ -1,9 +1,8 @@
 module portos
 
 abstract sig Regiao {
-	portos: some Porto
+	portos: one Porto
 }
-
 
 sig Norte extends Regiao{}
 
@@ -14,16 +13,26 @@ sig Leste extends Regiao{}
 sig Oeste extends Regiao{}
 
 sig Porto {
-	navio: set Navio,
-	nivel: set Nivel
+	nivelCombustivel: some NivelCombustivel
 }
 
 sig Navio {
-	combustivel: one Combustivel
+	combustivel: one Combustivel,
+	porto: one Porto
 }
 
-abstract sig Nivel {
+abstract sig NivelCombustivel {
+	nivel: one Nivel
 }
+
+sig NivelPetroleoBruto extends NivelCombustivel{}
+
+sig NivelGasolina extends NivelCombustivel{}
+
+sig NivelOleoDiesel extends NivelCombustivel{}
+
+
+abstract sig Nivel {}
 
 sig Alto extends Nivel{}
 
@@ -62,19 +71,14 @@ fact Regiao {
 	one reg: Regiao | reg in Sul
 	one reg: Regiao | reg in Oeste
 	one reg: Regiao | reg in Leste
-	all regiao: Regiao | #regiao.portos = 1
+	all reg: Regiao | one reg.portos
 }
 
-fact Navio {
-}
 
 
 fact Portos {
-	all porto: Porto | one porto.~portos
-	all porto: Porto | #porto.nivel = 1
-	all porto: Porto | #porto.navio > 0
-	all porto: Porto | one portos.porto
-	all p:Porto |  one portos.p
+	all p: Porto | one p.~portos
+	all p: Porto | some p.nivelCombustivel
 
 }
 
@@ -83,12 +87,14 @@ fact Nivel {
 }
 
 fact Combustivel {
-	one combustivel: Combustivel | combustivel in Gasolina
-	one combustivel: Combustivel | combustivel in PetroleoBruto
-	one combustivel: Combustivel | combustivel in OleoDiesel
+	one comb: Combustivel | comb in Gasolina
+	one comb: Combustivel | comb in PetroleoBruto
+	one comb: Combustivel | comb in OleoDiesel
 	all comb: Combustivel | one comb.~combustivel
+}
 
-
+fact NivelCombustivel {
+	all nb: NivelCombustivel | one nb.~nivelCombustivel
 }
 
 
