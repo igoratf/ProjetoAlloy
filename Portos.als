@@ -33,7 +33,8 @@ fact Portos {
 }
 
 
-pred show[]{
+pred show[] {
+
 }
 
 run show for 4
