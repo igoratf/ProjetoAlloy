@@ -28,7 +28,15 @@ sig Medio extends Nivel{}
 sig Baixo extends Nivel{}
 
 
-sig Navio{}
+sig Navio{
+	combustivel: some Combustivel
+}
+
+abstract sig Combustivel{}
+
+sig Gasolina extends Combustivel{}
+sig PetroleoBruto extends Combustivel{}
+sig OleoDiesel extends Combustivel{}
 
 fact Portos {
 	one p: Porto | p in PortoNorte
