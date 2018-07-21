@@ -1,105 +1,68 @@
 module portos
 
-abstract sig Regiao {
-	portos: one Porto
-}
 
-sig Norte extends Regiao{}
-
-sig Sul extends Regiao{}
-
-sig Leste extends Regiao{}
-
-sig Oeste extends Regiao{}
-
-sig Porto {
+abstract sig  Porto {
+	navios: some Navio,
 	nivelCombustivel: some NivelCombustivel
 }
 
-sig Navio {
-	combustivel: one Combustivel,
-	porto: one Porto
-}
+sig PortoNorte extends Porto{}
+sig PortoSul extends Porto{}
+sig PortoLeste extends Porto{}
+sig PortoOeste extends Porto{}
 
-abstract sig NivelCombustivel {
+
+abstract sig NivelCombustivel{
 	nivel: one Nivel
 }
 
+
 sig NivelPetroleoBruto extends NivelCombustivel{}
-
 sig NivelGasolina extends NivelCombustivel{}
-
 sig NivelOleoDiesel extends NivelCombustivel{}
 
-
-abstract sig Nivel {}
+abstract sig Nivel{}
 
 sig Alto extends Nivel{}
-
+sig Medio extends Nivel{}
 sig Baixo extends Nivel{}
 
-sig Medio extends Nivel{}
+
+sig Navio{
+	combustivel: some Combustivel
+}
 
 abstract sig Combustivel{}
 
 sig Gasolina extends Combustivel{}
-
 sig PetroleoBruto extends Combustivel{}
-
 sig OleoDiesel extends Combustivel{}
 
-fact Regiao {
-
-	one reg:Regiao |  reg in Norte
-
-	one reg:Regiao |  reg in Oeste
-
-	one reg:Regiao |  reg in Sul
-
-	one reg:Regiao |  reg in Leste
-
-}
-
-fact Nivel{
-
-	all niv:Nivel | one nivel.niv
-
-}
-
-fact Regiao {
-	one reg:Regiao |  reg in Norte
-	one reg: Regiao | reg in Sul
-	one reg: Regiao | reg in Oeste
-	one reg: Regiao | reg in Leste
-	all reg: Regiao | one reg.portos
-}
-
-
-
 fact Portos {
-	all p: Porto | one p.~portos
-	all p: Porto | some p.nivelCombustivel
+	one p: Porto | p in PortoNorte
+	one p: Porto | p in PortoSul
+	one p: Porto | p in PortoLeste
+	one p: Porto | p in PortoOeste
 
+	all p: Porto | some p.navios
+	all p: Porto | #p.nivelCombustivel = 3
+
+}
+
+
+fact NivelCombustivel {
+	one nb: NivelCombustivel | nb in NivelGasolina
+	one nb: NivelCombustivel | nb in NivelPetroleoBruto
 }
 
 fact Nivel {
-	all niv: Nivel | one niv.~nivel
-}
-
-fact Combustivel {
-	one comb: Combustivel | comb in Gasolina
-	one comb: Combustivel | comb in PetroleoBruto
-	one comb: Combustivel | comb in OleoDiesel
-	all comb: Combustivel | one comb.~combustivel
-}
-
-fact NivelCombustivel {
-	all nb: NivelCombustivel | one nb.~nivelCombustivel
+	all n: Nivel | some n.~nivel
 }
 
 
 pred show[]{
-	#Regiao = 4
+	#Porto = 4
+	#Porto.nivelCombustivel = 3
 }
 
 run show for 4
