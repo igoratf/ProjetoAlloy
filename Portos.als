@@ -14,7 +14,12 @@ sig Leste extends Regiao{}
 sig Oeste extends Regiao{}
 
 sig Porto {
-	nivel: Nivel
+	navio: set Navio,
+	nivel: set Nivel
+}
+
+sig Navio {
+	combustivel: one Combustivel
 }
 
 abstract sig Nivel{}
@@ -25,6 +30,14 @@ sig Baixo extends Nivel{}
 
 sig Medio extends Nivel{}
 
+abstract sig Combustivel{}
+
+sig Gasolina extends Combustivel{}
+
+sig PetroleoBruto extends Combustivel{}
+
+sig OleoDiesel extends Combustivel{}
+
 
 fact Portos {
 
@@ -33,8 +46,7 @@ fact Portos {
 }
 
 
-pred show[] {
-
+pred show[]{
 }
 
 run show for 4
