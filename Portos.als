@@ -22,7 +22,9 @@ sig Navio {
 	combustivel: one Combustivel
 }
 
-abstract sig Nivel{}
+abstract sig Nivel{
+	combustivel: one Combustivel
+}
 
 sig Alto extends Nivel{}
 
