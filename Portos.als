@@ -13,12 +13,12 @@ sig Leste extends Regiao{}
 sig Oeste extends Regiao{}
 
 sig Porto {
-	nivelCombustivel: some NivelCombustivel
+	nivelCombustivel: some NivelCombustivel,
+	navios: some Navio
 }
 
 sig Navio {
 	combustivel: one Combustivel,
-	porto: one Porto
 }
 
 abstract sig NivelCombustivel {
@@ -50,13 +50,15 @@ sig OleoDiesel extends Combustivel{}
 
 fact Regiao {
 
-	one reg:Regiao |  reg in Norte
+	one reg: Regiao |  reg in Norte
 
-	one reg:Regiao |  reg in Oeste
+	one reg: Regiao |  reg in Oeste
 
-	one reg:Regiao |  reg in Sul
+	one reg: Regiao |  reg in Sul
 
-	one reg:Regiao |  reg in Leste
+	one reg: Regiao |  reg in Leste
+	
+
 
 }
 
@@ -65,15 +67,6 @@ fact Nivel{
 	all niv:Nivel | one nivel.niv
 
 }
-
-fact Regiao {
-	one reg:Regiao |  reg in Norte
-	one reg: Regiao | reg in Sul
-	one reg: Regiao | reg in Oeste
-	one reg: Regiao | reg in Leste
-	all reg: Regiao | one reg.portos
-}
-
 
 
 fact Portos {
