@@ -15,7 +15,7 @@ sig Oeste extends Regiao{}
 
 sig Porto {
 	navio: set Navio,
-	nivel: set Nivel
+	nivel: Nivel
 }
 
 sig Navio {
@@ -23,7 +23,8 @@ sig Navio {
 }
 
 abstract sig Nivel{
-	combustivel: one Combustivel
+	combustivel: one Gasolina
+			
 }
 
 sig Alto extends Nivel{}
@@ -40,15 +41,39 @@ sig PetroleoBruto extends Combustivel{}
 
 sig OleoDiesel extends Combustivel{}
 
+fact Regiao {
+
+	one reg:Regiao |  reg in Norte
+
+	one reg:Regiao |  reg in Oeste
+
+	one reg:Regiao |  reg in Sul
+
+	one reg:Regiao |  reg in Leste
+
+}
+
+fact Nivel{
+
+	all niv:Nivel | one nivel.niv
+
+}
 
 fact Portos {
 
 	all porto: Porto | porto in (Regiao.portos)
 
+	all port:Porto | #(port.nivel) = 1
+
+	all porto: Porto | one portos.porto
+
+	all p:Porto |  one portos.p
+
 }
 
 
 pred show[]{
+	#Regiao = 4
 }
 
 run show for 4
