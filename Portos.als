@@ -39,6 +39,23 @@ sig PetroleoBruto extends Combustivel{}
 
 sig OleoDiesel extends Combustivel{}
 
+fact Regiao {
+
+	one reg:Regiao |  reg in Norte
+
+	one reg:Regiao |  reg in Oeste
+
+	one reg:Regiao |  reg in Sul
+
+	one reg:Regiao |  reg in Leste
+
+}
+
+fact Nivel{
+
+	all niv:Nivel | one nivel.niv
+
+}
 
 fact Regiao {
 	one reg:Regiao |  reg in Norte
@@ -56,6 +73,8 @@ fact Portos {
 	all porto: Porto | one porto.~portos
 	all porto: Porto | #porto.nivel = 1
 	all porto: Porto | #porto.navio > 0
+	all porto: Porto | one portos.porto
+	all p:Porto |  one portos.p
 
 }
 
@@ -68,10 +87,13 @@ fact Combustivel {
 	one combustivel: Combustivel | combustivel in PetroleoBruto
 	one combustivel: Combustivel | combustivel in OleoDiesel
 	all comb: Combustivel | one comb.~combustivel
+
+
 }
 
 
 pred show[]{
+	#Regiao = 4
 }
 
 run show for 4
