@@ -69,9 +69,9 @@ fact Navio {
 
 // Existe um nível para cada tipo de combustível
 fact NivelCombustivel {
-	one nb: NivelCombustivel | nb in NivelGasolina
-	one nb: NivelCombustivel | nb in NivelPetroleoBruto
-	one nb: NivelCombustivel | nb in NivelOleoDiesel
+	one nc: NivelCombustivel | nc in NivelGasolina
+	one nc: NivelCombustivel | nc in NivelPetroleoBruto
+	one nc: NivelCombustivel | nc in NivelOleoDiesel
 }
 
 
@@ -79,8 +79,6 @@ fact NivelCombustivel {
 fact Nivel {
 	all n: Nivel | some n.~nivel
 }
-
-
 
 
 ---------------------------------------- PREDICATES ----------------------------------------
