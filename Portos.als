@@ -87,4 +87,41 @@ pred show[]{
 
 }
 
+
+---------------------------------------- FUNCTIONS ----------------------------------------
+
+
+
+
+
+
+
+
+---------------------------------------- ASSERTS ----------------------------------------
+
+assert assertNaviosPorto {
+	all p: Porto | #(p.navios) > 0
+}
+
+assert assertNiveisCombustivelPorto {
+	all p: Porto | #(p.nivelCombustivel) = 3
+}
+
+assert assertNivelCombustivel {
+	all nc: NivelCombustivel | #(nc.nivel) = 1
+}
+
+
+
+---------------------------------------- CHECK'S ----------------------------------------
+
+--check assertNaviosPorto for 5
+--check assertNiveisCombustivelPorto for 5
+--check assertNivelCombustivel for 5
+
+
+
+
+
+
 run show for 4
