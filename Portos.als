@@ -3,10 +3,12 @@ module portos
 
 ---------------------------------------- SIGNATURES ----------------------------------------
 
-// Porto possui pelo menos um navio e os níveis de combustíveis
+// Porto possui 3 tipos de nivelCombustivel.
 abstract sig  Porto {
-	navios: some Navio,
-	nivelCombustivel: some NivelCombustivel
+	navios : some Navio,
+	nivPetrol : one NivelPetroleoBruto,
+	nivGasol : one NivelGasolina,
+	nivDies: one NivelOleoDiesel
 }
 
 sig PortoNorte extends Porto{}
@@ -35,9 +37,9 @@ sig Alto extends Nivel{}
 sig Medio extends Nivel{}
 sig Baixo extends Nivel{}
 
-
+--Navio possui um destino e um tipo de combustivel.
 sig Navio{
-	combustivel: some Combustivel
+	combustivel: one Combustivel
 }
 
 abstract sig Combustivel{}
@@ -54,30 +56,33 @@ fact Portos {
 	one p: Porto | p in PortoSul
 	one p: Porto | p in PortoLeste
 	one p: Porto | p in PortoOeste
-
-	all p: Porto | some p.navios
-	all p: Porto | #p.nivelCombustivel = 3
-
 }
 
 
 // Cada navio está associado a um único porto
 fact Navio {
 	all nav: Navio | one nav.~navios
+--	all nav : Navio | 
 }
 
 
 // Existe um nível para cada tipo de combustível
 fact NivelCombustivel {
-	one nc: NivelCombustivel | nc in NivelGasolina
-	one nc: NivelCombustivel | nc in NivelPetroleoBruto
-	one nc: NivelCombustivel | nc in NivelOleoDiesel
+	all np: NivelPetroleoBruto | one nivPetrol.np
+	all ng: NivelGasolina | one nivGasol.ng
+	all nd: NivelOleoDiesel | one nivDies.nd
+	
 }
 
 
 // Existe um nível associado a cada tipo de nível de combustível
 fact Nivel {
-	all n: Nivel | some n.~nivel
+	all n: Nivel | one n.~nivel
+}
+
+--Existe apenas um combustivel associado a um barco.
+fact Combustivel{
+	all c : Combustivel | one combustivel.c
 }
 
 
@@ -100,11 +105,11 @@ pred show[]{
 ---------------------------------------- ASSERTS ----------------------------------------
 
 assert assertNaviosPorto {
-	all p: Porto | #(p.navios) > 0
+--	all p: Porto | #(p.navios) > 0
 }
 
 assert assertNiveisCombustivelPorto {
-	all p: Porto | #(p.nivelCombustivel) = 3
+--	all p: Porto | #(p.nivelCombustivel) = 3
 }
 
 assert assertNivelCombustivel {
@@ -124,4 +129,4 @@ assert assertNivelCombustivel {
 
 
 
-run show for 4
+run show for 12
