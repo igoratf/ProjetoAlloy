@@ -5,7 +5,7 @@ module portos
 
 // Porto possui 3 tipos de nivelCombustivel.
 abstract sig  Porto {
-	navios : some Navio,
+--	navios : some Navio,
 	nivPetrol : one NivelPetroleoBruto,
 	nivGasol : one NivelGasolina,
 	nivDies: one NivelOleoDiesel
@@ -39,6 +39,7 @@ sig Baixo extends Nivel{}
 
 --Navio possui um destino e um tipo de combustivel.
 sig Navio{
+	destino: one Porto,
 	combustivel: one Combustivel
 }
 
@@ -56,12 +57,24 @@ fact Portos {
 	one p: Porto | p in PortoSul
 	one p: Porto | p in PortoLeste
 	one p: Porto | p in PortoOeste
+
+	all p: Porto |  #maximoDeDestinoPossivel[p] <= 3
+
+	all p: Porto | all b: Baixo | checaNivelBaixoGasol[p, b]  =>  (one n : Navio | defineDestino[n] = p and defineCombustivel[n] = Gasolina)
+	all p: Porto | all b: Baixo | checaNivelBaixoPetroleoBruto[p, b]   =>  (one n : Navio | defineDestino[n] = p and defineCombustivel[n] = PetroleoBruto) 
+	all p: Porto | all b: Baixo | checaNivelBaixoDiesel[p, b] =>  (one n : Navio |  defineDestino[n] = p and defineCombustivel[n] = OleoDiesel) 
+
+--	all p: Porto | some n: Navio | one comb: Gasolina | (Baixo in p.nivGasol.nivel) => ((n.destino = p) and (n.combustivel = comb)) else no n 
+
 }
 
 
 // Cada navio está associado a um único porto
 fact Navio {
-	all nav: Navio | one nav.~navios
+--	all nav: Navio | one nav.~navios
+	//Nenhum navio pode ser originado em um porto e ter como destino esse mesmo porto.
+--	all p: Porto | all n: Navio | p in n.destino => n not in p.navios
+--	 one n: Navio |  n.combustivel in Gasolina 
 }
 
 
@@ -70,7 +83,6 @@ fact NivelCombustivel {
 	all np: NivelPetroleoBruto | one nivPetrol.np
 	all ng: NivelGasolina | one nivGasol.ng
 	all nd: NivelOleoDiesel | one nivDies.nd
-	
 }
 
 
@@ -87,17 +99,36 @@ fact Combustivel{
 
 ---------------------------------------- PREDICATES ----------------------------------------
 
-pred show[]{
-
+--Verifica se o Nivel de Gasolina de um porto está baixo.
+pred checaNivelBaixoGasol[p:Porto, b: Baixo] {
+	p.nivGasol.nivel = b
 }
 
+--Verifica se o Nivel de Petroleo Bruto de um porto está baixo.
+pred checaNivelBaixoPetroleoBruto[p:Porto, b: Baixo] {
+	p.nivPetrol.nivel = b
+}
+
+--Verifica se o Nivel de Oleo Diesel de um porto está baixo.
+pred checaNivelBaixoDiesel[p:Porto, b: Baixo] {
+	p.nivDies.nivel = b
+}
 
 ---------------------------------------- FUNCTIONS ----------------------------------------
+--Função que retorna a quantidade de navios que podem ter o mesmo porto como destino.
+fun maximoDeDestinoPossivel[p: Porto]: set Navio{
+	destino.p
+}
 
+--Função que define o Porto que Navio precisa transportar Combustivel.
+fun defineDestino[n: Navio]: set Porto{
+	n.destino
+}
 
-
-
-
+--Função que define o Combustivel que o Navio precisa transportar.
+fun defineCombustivel[n: Navio]: set Combustivel{
+	n.combustivel
+}
 
 
 
@@ -125,7 +156,8 @@ assert assertNivelCombustivel {
 
 
 
-
+pred show[]{
+}
 
 
 run show for 12
