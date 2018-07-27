@@ -72,7 +72,6 @@ fact Portos {
 // Cada navio está associado a um único porto
 fact Navio {
 --	all nav: Navio | one nav.~navios
-	//Nenhum navio pode ser originado em um porto e ter como destino esse mesmo porto.
 --	all p: Porto | all n: Navio | p in n.destino => n not in p.navios
 --	 one n: Navio |  n.combustivel in Gasolina 
 }
