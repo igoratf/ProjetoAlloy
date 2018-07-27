@@ -69,7 +69,7 @@ fact Portos {
 
 // Cada navio está associado a um único porto
 fact Navio {
-	all nav: Navio | one nav.destino
+	one nav: Navio | one nav.destino
 }
 
 
