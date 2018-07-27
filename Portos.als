@@ -5,7 +5,6 @@ module portos
 
 // Porto possui 3 tipos de nivelCombustivel.
 abstract sig  Porto {
---	navios : some Navio,
 	nivPetrol : one NivelPetroleoBruto,
 	nivGasol : one NivelGasolina,
 	nivDies: one NivelOleoDiesel
@@ -64,16 +63,13 @@ fact Portos {
 	all p: Porto | all b: Baixo | checaNivelBaixoPetroleoBruto[p, b]   =>  (one n : Navio | defineDestino[n] = p and defineCombustivel[n] = PetroleoBruto) 
 	all p: Porto | all b: Baixo | checaNivelBaixoDiesel[p, b] =>  (one n : Navio |  defineDestino[n] = p and defineCombustivel[n] = OleoDiesel) 
 
---	all p: Porto | some n: Navio | one comb: Gasolina | (Baixo in p.nivGasol.nivel) => ((n.destino = p) and (n.combustivel = comb)) else no n 
 
 }
 
 
 // Cada navio está associado a um único porto
 fact Navio {
---	all nav: Navio | one nav.~navios
---	all p: Porto | all n: Navio | p in n.destino => n not in p.navios
---	 one n: Navio |  n.combustivel in Gasolina 
+	all nav: Navio | one nav.destino
 }
 
 
@@ -90,7 +86,7 @@ fact Nivel {
 	all n: Nivel | one n.~nivel
 }
 
---Existe apenas um combustivel associado a um barco.
+--Existe apenas um combustivel associado a um Navio.
 fact Combustivel{
 	all c : Combustivel | one combustivel.c
 }
@@ -133,25 +129,30 @@ fun defineCombustivel[n: Navio]: set Combustivel{
 
 ---------------------------------------- ASSERTS ----------------------------------------
 
-assert assertNaviosPorto {
---	all p: Porto | #(p.navios) > 0
-}
-
 assert assertNiveisCombustivelPorto {
---	all p: Porto | #(p.nivelCombustivel) = 3
+	all p: Porto | #(p.nivPetrol + p.nivGasol + p.nivDies) = 3
 }
 
 assert assertNivelCombustivel {
 	all nc: NivelCombustivel | #(nc.nivel) = 1
 }
 
+assert assertNavioDestino {
+	all navio: Navio | #(navio.destino) = 1
+}
+
+assert assertNavioCombustivel {
+	all navio: Navio | #(navio.combustivel) = 1
+}
 
 
 ---------------------------------------- CHECK'S ----------------------------------------
 
---check assertNaviosPorto for 5
+
 --check assertNiveisCombustivelPorto for 5
 --check assertNivelCombustivel for 5
+--check assertNavioDestino  for 5
+--check assertNavioCombustivel for 5
 
 
 
